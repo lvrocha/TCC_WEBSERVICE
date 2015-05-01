@@ -29,6 +29,22 @@ class Inicio extends CI_Controller {
 		$this->load->model('disciplina');
 		log_message('debug', 'Entrou no controler inicio');
 	}
+	
+
+	public function salva_sessions(){
+		$this->load->library('session');
+
+		$disciplina = $_POST['disciplina'];
+		$serie      = $_POST['serie'];
+		$turma      = $_POST['turma'];
+
+		$this->session->set_userdata('disciplina', $disciplina);
+		$this->session->set_userdata('serie', $serie);
+		$this->session->set_userdata('turma', $turma);
+
+
+	}
+
 	public function index()
 	{
 		log_message('debug', 'Entrou na funçao login');
