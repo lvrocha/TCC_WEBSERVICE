@@ -27,9 +27,48 @@ class Inicio extends CI_Controller {
 		error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 		$this->load->model('usuario');
 		$this->load->model('disciplina');
+		$this->load->model('alunos');
 		log_message('debug', 'Entrou no controler inicio');
 	}
+
+	public function salvaPresenca(){
+		if ($_POST) {
+			log_message("debug", "SALVA PRESENCA");
+			$retorno = $this->alunos->salvaPresenca($_POST);
+			log_message("debug", "SALVA PRESENCA - ". $retorno);
+			echo $retorno;
+		}
+	}
+
+	public function getalunos(){
+		$data = $this->alunos->listaAlunos($this->session->userdata('turma'));
+		foreach ($data as $key) {
+			$dados[] = array(
+					'nome' => ucwords($key->nome),
+					'id' => ucwords($key->id),
+				);
+		}
+
+		header('Content-type: application/json');
+		log_message('debug', 'Alunos - '. json_encode($dados));
+		echo json_encode($dados);
+	}
 	
+	public function getSessions(){
+
+		$disciplina = $this->disciplina->getDisciplina($this->session->userdata('disciplina'));
+		$serie = $this->disciplina->getSerie("",$this->session->userdata('serie'));
+		$turma = $this->disciplina->getTurma("",$this->session->userdata('turma'));
+
+		$dados[] = array(
+					'disciplina' => $disciplina[0]->descricao,
+					'serie' => $serie[0]->descricao,
+					'turma' => $turma[0]->descricao,
+
+			);
+		header('Content-type: application/json');
+		echo json_encode($dados);
+	}
 
 	public function salva_sessions(){
 		$this->load->library('session');
@@ -87,9 +126,9 @@ class Inicio extends CI_Controller {
 	}
 
 	public function dropdown_turma(){
-		$turma = $_POST['turma'];
+		$serie = $_POST['serie'];
 
-		$data = $this->disciplina->getTurma($turma);
+		$data = $this->disciplina->getTurma($serie);
 		foreach ($data as $key) {
 			$dados[] = array(
 					'id' => $key->id,

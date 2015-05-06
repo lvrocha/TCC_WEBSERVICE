@@ -2,11 +2,15 @@
 
 class Disciplina extends CI_Model {
 
-	public function getDisciplina(){
+	public function getDisciplina($id=''){
 
 		log_message('debug', 'Entrou na getDisciplinad');
 
 		$query = "select * from disciplina";
+
+		if ($id != '') {
+			$query .= " where disciplina.id = {$id}";
+		}
 
 		log_message('debug', 'SQL - '. $query);
 
@@ -17,7 +21,7 @@ class Disciplina extends CI_Model {
 		}
 	}
 
-	public function getSerie($match=""){
+	public function getSerie($match="", $id=""){
 
 		log_message('debug', 'Entrou na getDisciplinad');
 
@@ -32,6 +36,8 @@ class Disciplina extends CI_Model {
 		$query .= "         ON( serie.id = disciplina_serie.id_serie ) ";
 		if ($match != '') {
 			$query .= "WHERE  disciplina.id = {$match} ";
+		}elseif ($id != '') {
+			$query .= "WHERE  serie.id = {$id} ";
 		}
 
 		log_message('debug', 'SQL - '. $query);
@@ -43,7 +49,7 @@ class Disciplina extends CI_Model {
 		}
 	}
 
-	public function getTurma($match=""){
+	public function getTurma($match="", $id=""){
 
 		log_message('debug', 'Entrou na getDisciplinad');
 
@@ -53,6 +59,8 @@ class Disciplina extends CI_Model {
 		$query .= "FROM   turma ";
 		if ($match != '') {
 			$query .= "WHERE  id_serie = {$match} ";
+		}elseif ($id != '') {
+			$query .= "WHERE  turma.id = {$id} ";
 		}
 		
 
