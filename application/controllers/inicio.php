@@ -28,20 +28,34 @@ class Inicio extends CI_Controller {
 		$this->load->model('usuario');
 		$this->load->model('disciplina');
 		$this->load->model('alunos');
+		$this->load->model('atividade');
 		log_message('debug', 'Entrou no controler inicio');
 	}
 
-	public function salvaPresenca(){
+
+	public function cadastra_atividade(){
+		if ($_POST) {
+			$retorno = $this->atividade->cadastra_atividade($_POST);
+			if ($retorno == true){
+				echo "Registro inserido com sucesso!";
+			}else{
+				echo "Houve algum problema ao inserir o registro!";
+			}
+		}
+	}
+	
+
+	public function registraPresenca(){
 		if ($_POST) {
 			log_message("debug", "SALVA PRESENCA");
-			$retorno = $this->alunos->salvaPresenca($_POST);
+			$retorno = $this->alunos->registraPresenca($_POST);
 			log_message("debug", "SALVA PRESENCA - ". $retorno);
 			echo $retorno;
 		}
 	}
 
-	public function getalunos(){
-		$data = $this->alunos->listaAlunos($this->session->userdata('turma'));
+	public function lista_alunos(){
+		$data = $this->alunos->lista_alunos($this->session->userdata('turma'));
 		foreach ($data as $key) {
 			$dados[] = array(
 					'nome' => ucwords($key->nome),
@@ -64,7 +78,9 @@ class Inicio extends CI_Controller {
 					'disciplina' => $disciplina[0]->descricao,
 					'serie' => $serie[0]->descricao,
 					'turma' => $turma[0]->descricao,
-
+					'id_disciplina' => $disciplina[0]->id,
+					'id_serie' => $serie[0]->id,
+					'id_turma' => $turma[0]->id
 			);
 		header('Content-type: application/json');
 		echo json_encode($dados);
@@ -93,6 +109,19 @@ class Inicio extends CI_Controller {
 		log_message('debug', 'testando - ' . $retorno);
 
 
+	}
+	
+	public function dropdown_tipoatividade(){
+		$data = $this->disciplina->getTipoAtividade();
+		foreach ($data as $key){
+			$dados[] = array(
+				'id' => $key->id,
+				'descricao' => $key->descricao 
+			);
+		}
+		
+		header('Content-type: application/json');
+		echo json_encode($dados);
 	}
 
 	public function dropdown_disciplina(){

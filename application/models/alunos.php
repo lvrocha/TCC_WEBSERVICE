@@ -2,7 +2,7 @@
 
 class Alunos extends CI_Model {
 
-	function listaAlunos($turma = ""){
+	function lista_alunos($turma = ""){
 		$sql = "SELECT * FROM `aluno` ";
 		if ($turma != "") {
 			$sql .= "WHERE `id_turma` = {$turma}";
@@ -16,16 +16,16 @@ class Alunos extends CI_Model {
 		
 	}
 
-	function salvaPresenca($dados=""){
-		log_message('debug', 'entrou no model alunos - salvapresenca');
+	function registraPresenca($dados=""){
+		log_message('debug', 'entrou no model alunos - registraPresenca');
 		if ($dados['chk_presenca'] != '') {
 			log_message('debug', 'entrou no if'. $dados['chk_presenca']);
 
 			foreach ($dados['chk_presenca'] as $key) {
 				$sql = "INSERT INTO `aluno_presente` "
-						."(`id_aluno`, `data`, `presente`) "
+						."(`id_aluno`, `data`, `presente`, `id_disciplina`) "
 						."VALUES "
-						. "('{$key}','{$dados['datapresenca']}','1')";
+						. "('{$key}','{$dados['datapresenca']}','1', '{$dados['id_disciplina']}')";
 
 				log_message('debug', "SALVA PRESENCA - SQL - ".$sql);
 

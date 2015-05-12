@@ -20,6 +20,16 @@ class Disciplina extends CI_Model {
 			return $query->result();
 		}
 	}
+	
+	public function getTipoAtividade(){
+		$query = "select * from tipo_atividade";
+
+		$query = $this->db->query($query);
+
+		if ($query->num_rows()>0) {
+			return $query->result();
+		}
+	}
 
 	public function getSerie($match="", $id=""){
 
